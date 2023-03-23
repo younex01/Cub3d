@@ -91,6 +91,34 @@ static void draw_wall(t_data *data, t_raycast *rc, int x)
     draw_vertical_line(data, rc, x, get_wall_color(data, rc));
 }
 
+// static void    movement(t_data *data)
+// {
+//     double oldDir[2];
+//     double oldPlan[2];
+
+//     // if(!(data->map_data[(int)(data->pos[X] + data->dir[X] * data->moveSpeed)][(int)data->pos[Y]]))
+//     //     data->pos[X] += data->dir[X] * data->moveSpeed;
+//     // if(!(data->map_data[(int)data->pos[X]][(int)(data->pos[Y] + data->dir[Y] * data->moveSpeed)]))
+//     //     data->pos[Y] += data->dir[Y] * data->moveSpeed;
+
+//     // if(!(data->map_data[(int)(data->pos[X] - data->dir[X] * data->moveSpeed)][(int)data->pos[Y]]))
+//     //     data->pos[X] -= data->dir[X] * data->moveSpeed;
+//     // if(!(data->map_data[(int)data->pos[X]][(int)(data->pos[Y] - data->dir[Y] * data->moveSpeed)]))
+//     //     data->pos[Y] -= data->dir[Y] * data->moveSpeed;
+
+//     // oldDir[X] = data->dir[X];
+//     // data->dir[X] = data->dir[X] * cos(-data->rotSpeed) - data->dir[Y] * sin(-data->rotSpeed);
+//     // data->dir[X] = oldDir[X] * sin(-data->rotSpeed) + data->dir[Y] * cos(-data->rotSpeed);
+//     // data->plane[X] = data->plane[X] * cos(-data->rotSpeed) - data->plane[Y] * sin(-data->rotSpeed);
+//     // data->plane[Y] = oldPlan[X] * sin(-data->rotSpeed) + data->plane[Y] * cos(-data->rotSpeed);
+
+//     // oldDir[X] = data->dir[X];
+//     // data->dir[X] = data->dir[X] * cos(data->rotSpeed) - data->dir[Y] * sin(data->rotSpeed);
+//     // data->dir[X] = oldDir[X] * sin(data->rotSpeed) + data->dir[Y] * cos(data->rotSpeed);
+//     // data->plane[X] = data->plane[X] * cos(data->rotSpeed) - data->plane[Y] * sin(data->rotSpeed);
+//     // data->plane[Y] = oldPlan[X] * sin(data->rotSpeed) + data->plane[Y] * cos(data->rotSpeed);
+// }
+
 void    raycast(t_data *data)
 {
     int         x;
@@ -98,6 +126,7 @@ void    raycast(t_data *data)
     t_raycast   rc;
 
     x = -1;
+    // movement(data);
     while (++x < WIN_WIDTH)
     {
         cameraX = 2.0 * x / WIN_WIDTH - 1;

@@ -4,6 +4,7 @@
 # include <math.h>
 # include <mlx.h>
 #include <stdlib.h>
+# include <stdio.h>
 
 # define WIN_WIDTH  1280
 # define WIN_HEIGHT 720
