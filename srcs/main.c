@@ -46,7 +46,7 @@ static void game_init(t_data *data)
     data->dir[Y] = 0;
     data->plane[X] = 0;
     data->plane[Y] = 0.66;
-    data->rotSpeed = 0.3; // 0.1
+    data->rotSpeed = 1.5 * (3.14 / 180); // 0.1
     data->moveSpeed = 0.9; //0.08
 
     // 	data->player.rot_speed = 1.5 * (M_PI / 180);
@@ -55,8 +55,8 @@ static void game_init(t_data *data)
 
 int	keypress(int keycode,t_data *data)
 {
-    // double oldDir;
-    // double oldPlan;
+    double oldDir;
+    double oldPlan;
 
 	if (keycode == 53 && data)
 		exit(0);
@@ -72,33 +72,33 @@ int	keypress(int keycode,t_data *data)
     }
     if (keycode == 2)
     {
-        if(!(data->map_data[(int)data->pos[X]][(int)(data->pos[Y] + data->dir[Y] * data->moveSpeed)]))
+        if(!(data->map_data[(int)data->pos[X]][(int)(data->pos[Y] + data->moveSpeed)]))
             data->pos[Y] += data->moveSpeed;
 
     }
     if (keycode == 0)
     {
-        if(!(data->map_data[(int)data->pos[X]][(int)(data->pos[Y] - data->dir[Y] * data->moveSpeed)]))
+        if(!(data->map_data[(int)data->pos[X]][(int)(data->pos[Y] - data->moveSpeed)]))
             data->pos[Y] -= data->moveSpeed;
     }
-    // if(keycode == 2)
-    // {
-    //     oldDir = data->dir[X];
-    //     data->dir[X] = data->dir[X] * cos(-data->rotSpeed) - data->dir[Y] * sin(-data->rotSpeed);
-    //     data->dir[X] = oldDir * sin(-data->rotSpeed) + data->dir[Y] * cos(-data->rotSpeed);
-    //     oldPlan = data->plane[X];
-    //     data->plane[X] = data->plane[X] * cos(-data->rotSpeed) - data->plane[Y] * sin(-data->rotSpeed);
-    //     data->plane[Y] = oldPlan * sin(-data->rotSpeed) + data->plane[Y] * cos(-data->rotSpeed);
-    // }
-    // if(keycode == 0)
-    // {
-    //     oldDir = data->dir[X];
-    //     data->dir[X] = data->dir[X] * cos(data->rotSpeed) - data->dir[Y] * sin(data->rotSpeed);
-    //     data->dir[X] = oldDir * sin(data->rotSpeed) + data->dir[Y] * cos(data->rotSpeed);
-    //     oldPlan = data->plane[X];
-    //     data->plane[X] = data->plane[X] * cos(data->rotSpeed) - data->plane[Y] * sin(data->rotSpeed);
-    //     data->plane[Y] = oldPlan * sin(data->rotSpeed) + data->plane[Y] * cos(data->rotSpeed);
-    // }
+    if(keycode == 124)
+    {
+        oldDir = data->dir[X];
+        data->dir[X] = data->dir[X] * cos(-data->rotSpeed) - data->dir[Y] * sin(-data->rotSpeed);
+        data->dir[X] = oldDir * sin(-data->rotSpeed) + data->dir[Y] * cos(-data->rotSpeed);
+        oldPlan = data->plane[X];
+        data->plane[X] = data->plane[X] * cos(-data->rotSpeed) - data->plane[Y] * sin(-data->rotSpeed);
+        data->plane[Y] = oldPlan * sin(-data->rotSpeed) + data->plane[Y] * cos(-data->rotSpeed);
+    }
+    if(keycode == 123)
+    {
+        oldDir = data->dir[X];
+        data->dir[X] = data->dir[X] * cos(data->rotSpeed) - data->dir[Y] * sin(data->rotSpeed);
+        data->dir[X] = oldDir * sin(data->rotSpeed) + data->dir[Y] * cos(data->rotSpeed);
+        oldPlan = data->plane[X];
+        data->plane[X] = data->plane[X] * cos(data->rotSpeed) - data->plane[Y] * sin(data->rotSpeed);
+        data->plane[Y] = oldPlan * sin(data->rotSpeed) + data->plane[Y] * cos(data->rotSpeed);
+    }
     // if (keycode == 13)
     // 	data->moveSpeed = 1;
     // if (keycode == 1)
