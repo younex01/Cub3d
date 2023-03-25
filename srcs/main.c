@@ -75,32 +75,17 @@ int	keypress(int keycode,t_data *data)
     }
     if (keycode == 2)
     {
-        if (fabs(data->dir[X]) > fabs(data->dir[Y]) 
-            && !(data->map_data[(int)(data->pos[X] - data->dir[Y] * data->moveSpeed)][(int)(data->pos[Y] - data->dir[X] * data->moveSpeed)]))
-        {
-            data->pos[X] -= data->dir[Y] * data->moveSpeed;
-            data->pos[Y] -= data->dir[X] * data->moveSpeed;
-        }
-        else if (fabs(data->dir[X]) < fabs(data->dir[Y]) 
-            && !(data->map_data[(int)(data->pos[X] + data->dir[Y] * data->moveSpeed)][(int)(data->pos[Y] + data->dir[X] * data->moveSpeed)]))
-        {
-            data->pos[Y] += data->dir[X] * data->moveSpeed;
-            data->pos[X] += data->dir[Y] * data->moveSpeed;
-        }
+        if(!(data->map_data[(int)(data->pos[X] + data->dir[X] * data->moveSpeed)][(int)data->pos[Y]]))
+            data->pos[X] += data->plane[X] * data->moveSpeed;
+        if(!(data->map_data[(int)data->pos[X]][(int)(data->pos[Y] + data->dir[Y] * data->moveSpeed)]))
+            data->pos[Y] += data->plane[Y] * data->moveSpeed;
     }
     if (keycode == 0)
     {
-        if (fabs(data->dir[X]) < fabs(data->dir[Y]) && !(data->map_data[(int)(data->pos[X] - data->dir[Y] * data->moveSpeed)][(int)(data->pos[Y] - data->dir[X] * data->moveSpeed)]))
-        {
-            data->pos[X] -= data->dir[Y] * data->moveSpeed;
-            data->pos[Y] -= data->dir[X] * data->moveSpeed;
-        }
-        else if (fabs(data->dir[X]) > fabs(data->dir[Y]) 
-            && !(data->map_data[(int)(data->pos[X] + data->dir[Y] * data->moveSpeed)][(int)(data->pos[Y] + data->dir[X] * data->moveSpeed)]))
-        {
-            data->pos[Y] += data->dir[X] * data->moveSpeed;
-            data->pos[X] += data->dir[Y] * data->moveSpeed;
-        }
+        if(!(data->map_data[(int)(data->pos[X] - data->dir[X] * data->moveSpeed)][(int)data->pos[Y]]))
+            data->pos[X] -= data->plane[X] * data->moveSpeed;
+        if(!(data->map_data[(int)data->pos[X]][(int)(data->pos[Y] - data->dir[Y] * data->moveSpeed)]))
+            data->pos[Y] -= data->plane[Y] * data->moveSpeed;
     }
     if(keycode == 124)
     {
