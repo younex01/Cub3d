@@ -46,9 +46,8 @@ static void game_init(t_data *data)
     data->dir[Y] = 0;
     data->plane[X] = 0;
     data->plane[Y] = 0.66;
-    data->rotSpeed = 1.5 * (3.14 / 180); // 0.1
+    data->rotSpeed = 0.08; // 0.1
     data->moveSpeed = 0.9; //0.08
-
     // 	data->player.rot_speed = 1.5 * (M_PI / 180);
 	// data->player.move_speed = 50;
 }
@@ -64,37 +63,59 @@ int	keypress(int keycode,t_data *data)
 	{
         if(!(data->map_data[(int)(data->pos[X] + data->dir[X] * data->moveSpeed)][(int)data->pos[Y]]))
             data->pos[X] += data->dir[X] * data->moveSpeed;
+        if(!(data->map_data[(int)data->pos[X]][(int)(data->pos[Y] + data->dir[Y] * data->moveSpeed)]))
+            data->pos[Y] += data->dir[Y] * data->moveSpeed;
     }
 	if (keycode == 1)
 	{
         if(!(data->map_data[(int)(data->pos[X] - data->dir[X] * data->moveSpeed)][(int)data->pos[Y]]))
             data->pos[X] -= data->dir[X] * data->moveSpeed;
+        if(!(data->map_data[(int)data->pos[X]][(int)(data->pos[Y] - data->dir[Y] * data->moveSpeed)]))
+            data->pos[Y] -= data->dir[Y] * data->moveSpeed;
     }
     if (keycode == 2)
     {
-        if(!(data->map_data[(int)data->pos[X]][(int)(data->pos[Y] + data->moveSpeed)]))
-            data->pos[Y] += data->moveSpeed;
-
+        if (fabs(data->dir[X]) > fabs(data->dir[Y]) 
+            && !(data->map_data[(int)(data->pos[X] - data->dir[Y] * data->moveSpeed)][(int)(data->pos[Y] - data->dir[X] * data->moveSpeed)]))
+        {
+            data->pos[X] -= data->dir[Y] * data->moveSpeed;
+            data->pos[Y] -= data->dir[X] * data->moveSpeed;
+        }
+        else if (fabs(data->dir[X]) < fabs(data->dir[Y]) 
+            && !(data->map_data[(int)(data->pos[X] + data->dir[Y] * data->moveSpeed)][(int)(data->pos[Y] + data->dir[X] * data->moveSpeed)]))
+        {
+            data->pos[Y] += data->dir[X] * data->moveSpeed;
+            data->pos[X] += data->dir[Y] * data->moveSpeed;
+        }
     }
     if (keycode == 0)
     {
-        if(!(data->map_data[(int)data->pos[X]][(int)(data->pos[Y] - data->moveSpeed)]))
-            data->pos[Y] -= data->moveSpeed;
+        if (fabs(data->dir[X]) < fabs(data->dir[Y]) && !(data->map_data[(int)(data->pos[X] - data->dir[Y] * data->moveSpeed)][(int)(data->pos[Y] - data->dir[X] * data->moveSpeed)]))
+        {
+            data->pos[X] -= data->dir[Y] * data->moveSpeed;
+            data->pos[Y] -= data->dir[X] * data->moveSpeed;
+        }
+        else if (fabs(data->dir[X]) > fabs(data->dir[Y]) 
+            && !(data->map_data[(int)(data->pos[X] + data->dir[Y] * data->moveSpeed)][(int)(data->pos[Y] + data->dir[X] * data->moveSpeed)]))
+        {
+            data->pos[Y] += data->dir[X] * data->moveSpeed;
+            data->pos[X] += data->dir[Y] * data->moveSpeed;
+        }
     }
     if(keycode == 124)
     {
         oldDir = data->dir[X];
-        data->dir[X] = data->dir[X] * cos(-data->rotSpeed) - data->dir[Y] * sin(-data->rotSpeed);
-        data->dir[X] = oldDir * sin(-data->rotSpeed) + data->dir[Y] * cos(-data->rotSpeed);
+        data->dir[X] = data->dir[X] * cos(-(data->rotSpeed)) - data->dir[Y] * sin(-(data->rotSpeed));
+        data->dir[Y] = oldDir * sin(-(data->rotSpeed)) + data->dir[Y] * cos(-(data->rotSpeed));
         oldPlan = data->plane[X];
-        data->plane[X] = data->plane[X] * cos(-data->rotSpeed) - data->plane[Y] * sin(-data->rotSpeed);
-        data->plane[Y] = oldPlan * sin(-data->rotSpeed) + data->plane[Y] * cos(-data->rotSpeed);
+        data->plane[X] = data->plane[X] * cos(-(data->rotSpeed)) - data->plane[Y] * sin(-(data->rotSpeed));
+        data->plane[Y] = oldPlan * sin(-(data->rotSpeed)) + data->plane[Y] * cos(-(data->rotSpeed));
     }
     if(keycode == 123)
     {
         oldDir = data->dir[X];
         data->dir[X] = data->dir[X] * cos(data->rotSpeed) - data->dir[Y] * sin(data->rotSpeed);
-        data->dir[X] = oldDir * sin(data->rotSpeed) + data->dir[Y] * cos(data->rotSpeed);
+        data->dir[Y] = oldDir * sin(data->rotSpeed) + data->dir[Y] * cos(data->rotSpeed);
         oldPlan = data->plane[X];
         data->plane[X] = data->plane[X] * cos(data->rotSpeed) - data->plane[Y] * sin(data->rotSpeed);
         data->plane[Y] = oldPlan * sin(data->rotSpeed) + data->plane[Y] * cos(data->rotSpeed);
