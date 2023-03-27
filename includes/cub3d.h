@@ -36,6 +36,10 @@ typedef struct
     double  plane[2];
     double  moveSpeed;
     double  rotSpeed;
+    void    *texture;
+    int     tex_w;
+    int     tex_h;
+    char    *img_color;
 }   t_data;
 
 typedef struct
@@ -54,5 +58,7 @@ typedef struct
 
 void    draw_vertical_line(t_data *data, t_raycast *rc, int x, int wall_color);
 void    raycast(t_data *data);
+void img_pixel_put(t_data *data, int x, int y, int color);
+void    load_texture(t_data *data);
 
 #endif // CUB3D_H

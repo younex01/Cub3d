@@ -75,16 +75,16 @@ int	keypress(int keycode,t_data *data)
     }
     if (keycode == 2)
     {
-        if(!(data->map_data[(int)(data->pos[X] + data->dir[X] * data->moveSpeed)][(int)data->pos[Y]]))
+        if(!(data->map_data[(int)(data->pos[X] + data->plane[X] * data->moveSpeed)][(int)data->pos[Y]]))
             data->pos[X] += data->plane[X] * data->moveSpeed;
-        if(!(data->map_data[(int)data->pos[X]][(int)(data->pos[Y] + data->dir[Y] * data->moveSpeed)]))
+        if(!(data->map_data[(int)data->pos[X]][(int)(data->pos[Y] + data->plane[Y] * data->moveSpeed)]))
             data->pos[Y] += data->plane[Y] * data->moveSpeed;
     }
     if (keycode == 0)
     {
-        if(!(data->map_data[(int)(data->pos[X] - data->dir[X] * data->moveSpeed)][(int)data->pos[Y]]))
+        if(!(data->map_data[(int)(data->pos[X] - data->plane[X] * data->moveSpeed)][(int)data->pos[Y]]))
             data->pos[X] -= data->plane[X] * data->moveSpeed;
-        if(!(data->map_data[(int)data->pos[X]][(int)(data->pos[Y] - data->dir[Y] * data->moveSpeed)]))
+        if(!(data->map_data[(int)data->pos[X]][(int)(data->pos[Y] - data->plane[Y] * data->moveSpeed)]))
             data->pos[Y] -= data->plane[Y] * data->moveSpeed;
     }
     if(keycode == 124)
@@ -105,17 +105,18 @@ int	keypress(int keycode,t_data *data)
         data->plane[X] = data->plane[X] * cos(data->rotSpeed) - data->plane[Y] * sin(data->rotSpeed);
         data->plane[Y] = oldPlan * sin(data->rotSpeed) + data->plane[Y] * cos(data->rotSpeed);
     }
-    // if (keycode == 13)
-    // 	data->moveSpeed = 1;
-    // if (keycode == 1)
-    // 	data->moveSpeed = -1;
-    // if (keycode == 2)
-    // 	data->rotSpeed *= 1;
-    // if (keycode == 0)
-    //     data->rotSpeed *= -1;
     mlx_clear_window(data->mlx_ptr, data->win_ptr);
     raycast(data);
 	return (0);
+}
+
+void    load_texture(t_data *data)
+{
+    char *xpm = "/Users/yelousse/Desktop/vv/texture/wall.xpm";
+    data->texture = mlx_xpm_file_to_image(data->mlx_ptr, xpm, &data->tex_w, &data->tex_h);
+    if(data->texture == NULL)
+        return;
+    data->img_color = mlx_get_data_addr(data->texture, &data->bits_per_pixel, &data->size_line, &data->endian);
 }
 
 int main(void)
