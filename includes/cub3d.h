@@ -39,7 +39,17 @@ typedef struct
     void    *texture;
     int     tex_w;
     int     tex_h;
-    char    *img_color;
+    unsigned  int    *img_color;
+    int     tex_size_line;
+    int     tex_endian;
+    int     tex_bbp;
+    double  wallX;
+    int     texX;
+    int     texY;
+    double  step;
+    double texPos;
+    double y;
+    int color;
 }   t_data;
 
 typedef struct

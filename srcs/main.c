@@ -106,6 +106,7 @@ int	keypress(int keycode,t_data *data)
         data->plane[Y] = oldPlan * sin(data->rotSpeed) + data->plane[Y] * cos(data->rotSpeed);
     }
     mlx_clear_window(data->mlx_ptr, data->win_ptr);
+    // mlx_destroy_image(data->mlx_ptr, data->win_ptr);
     raycast(data);
 	return (0);
 }
@@ -116,7 +117,7 @@ void    load_texture(t_data *data)
     data->texture = mlx_xpm_file_to_image(data->mlx_ptr, xpm, &data->tex_w, &data->tex_h);
     if(data->texture == NULL)
         return;
-    data->img_color = mlx_get_data_addr(data->texture, &data->bits_per_pixel, &data->size_line, &data->endian);
+    data->img_color = (unsigned int *)mlx_get_data_addr(data->texture, &data->tex_bbp, &data->tex_size_line, &data->tex_endian);
 }
 
 int main(void)
@@ -125,6 +126,7 @@ int main(void)
 
     game_init(&data); // TODO: This is the parsing part
     data.mlx_ptr = mlx_init();
+    load_texture(&data);
     data.win_ptr = mlx_new_window(data.mlx_ptr,  WIN_WIDTH,  WIN_HEIGHT,  "cub3d");
     data.img_ptr = mlx_new_image(data.mlx_ptr,  WIN_WIDTH,  WIN_HEIGHT);
     data.data_addr = mlx_get_data_addr(data.img_ptr, 

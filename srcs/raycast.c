@@ -85,45 +85,33 @@ static void draw_wall(t_data *data, t_raycast *rc, int x)
     rc->draw_start = -rc->line_height / 2  + WIN_HEIGHT / 2;
     if (rc->draw_start < 0)
         rc->draw_start = 0;
-    // rc->draw_end = rc->draw_start + rc->line_height;
-    // if (rc->draw_end > WIN_HEIGHT)
+    rc->draw_end = rc->draw_start + rc->line_height;
+    if (rc->draw_end > WIN_HEIGHT)
         rc->draw_end = rc->line_height / 2 + WIN_HEIGHT / 2; // rc->draw_end = WIN_HEIGHT - 1;
     if (rc->draw_end >= WIN_HEIGHT)
         rc->draw_end = WIN_HEIGHT - 1;
-    load_texture(data);
-    double wallX;
     if(rc->side == 0)
-        wallX = data->pos[Y] + rc->perp_wall_dist * rc->ray_dir[Y];
+        data->wallX = data->pos[Y] + rc->perp_wall_dist * rc->ray_dir[Y];
     else
-        wallX = data->pos[X] + rc->perp_wall_dist * rc->ray_dir[X];
-    wallX -= floor(wallX);
-    int texX = (int)(wallX + (double)(data->tex_w));
+        data->wallX = data->pos[X] + rc->perp_wall_dist * rc->ray_dir[X];
+    data->wallX -= floor(data->wallX);
+    data->texX = (int)(data->wallX * (double)(data->tex_w));
     if (rc->side == 0 && rc->ray_dir[X] > 0)
-        texX = data->tex_w - texX - 1;
+        data->texX = data->tex_w - data->texX - 1;
     if (rc->side == 1 && rc->ray_dir[Y] < 0)
-        texX = data->tex_w - texX - 1;
-    double step = (double)data->tex_h / rc->line_height;
-    double texPos = (rc->draw_start - WIN_HEIGHT / 2 + rc->line_height / 2) * step;
-    int y = rc->draw_start;
-    int texY;
-    int color;
-    puts("||");
-    while(y < rc->draw_end)
+        data->texX = data->tex_w - data->texX - 1;
+    data->step = (double)data->tex_h / rc->line_height;
+    data->texPos = (rc->draw_start - WIN_HEIGHT / 2 + rc->line_height / 2) * data->step;
+    data->y = rc->draw_start;
+    while(data->y < rc->draw_end)
     {
-        if ((int)fmod(texPos, (data->tex_h - 1)))
-            texY = (int)fmod(texPos, (data->tex_h - 1)); // -1
-        // if (texY == 0)
-        //     break;
-        texPos += step;
-        printf("%d,%f,%f\n",texY, texPos, step);
-        color = *(int *)(data->img_color + (texY * data->size_line + texX * (data->bits_per_pixel / 8)));
-        puts("--");
-        if (rc->side == 1)
-            color = (color >> 1) & 0x7F7F7F;
-        // printf("%d,%d\n",color,rc->side);
-        // img_pixel_put(data, x, y, color);
-        y++;
-        puts("*");
+        data->texY = (int)fmod(data->texPos, (data->tex_h - 1));
+        data->texPos += data->step;
+        data->color = *(int *)(data->img_color + (data->texY * data->tex_size_line + data->texX * (data->tex_bbp / 8)));
+        // if (rc->side == 1)
+        //     data->color = (data->color >> 1) & 0x7F7F7F;
+        img_pixel_put(data, x, data->y, data->color);
+        data->y++;
     }
     draw_vertical_line(data, rc, x, get_wall_color(data, rc));
 }
