@@ -117,7 +117,7 @@ void    load_texture(t_data *data)
     data->texture = mlx_xpm_file_to_image(data->mlx_ptr, xpm, &data->tex_w, &data->tex_h);
     if(data->texture == NULL)
         return;
-    data->img_color = (unsigned int *)mlx_get_data_addr(data->texture, &data->tex_bbp, &data->tex_size_line, &data->tex_endian);
+    data->img_color = (int *)mlx_get_data_addr(data->texture, &data->tex_bbp, &data->tex_size_line, &data->tex_endian);
 }
 
 int main(void)

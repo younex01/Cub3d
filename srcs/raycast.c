@@ -81,13 +81,13 @@ static int  get_wall_color(t_data *data, t_raycast *rc)
 
 static void draw_wall(t_data *data, t_raycast *rc, int x)
 {
-    rc->line_height = WIN_HEIGHT / rc->perp_wall_dist;
-    rc->draw_start = -rc->line_height / 2  + WIN_HEIGHT / 2;
+    rc->line_height = (int)(WIN_HEIGHT / rc->perp_wall_dist);
+    rc->draw_start = (-rc->line_height / 2)  + (WIN_HEIGHT / 2);
     if (rc->draw_start < 0)
         rc->draw_start = 0;
     rc->draw_end = rc->draw_start + rc->line_height;
     if (rc->draw_end > WIN_HEIGHT)
-        rc->draw_end = rc->line_height / 2 + WIN_HEIGHT / 2; // rc->draw_end = WIN_HEIGHT - 1;
+        rc->draw_end = (rc->line_height / 2) + (WIN_HEIGHT / 2); // rc->draw_end = WIN_HEIGHT - 1;
     if (rc->draw_end >= WIN_HEIGHT)
         rc->draw_end = WIN_HEIGHT - 1;
     if(rc->side == 0)
@@ -100,16 +100,17 @@ static void draw_wall(t_data *data, t_raycast *rc, int x)
         data->texX = data->tex_w - data->texX - 1;
     if (rc->side == 1 && rc->ray_dir[Y] < 0)
         data->texX = data->tex_w - data->texX - 1;
-    data->step = (double)data->tex_h / rc->line_height;
+    data->step = 1.0 * data->tex_h / rc->line_height;
     data->texPos = (rc->draw_start - WIN_HEIGHT / 2 + rc->line_height / 2) * data->step;
     data->y = rc->draw_start;
     while(data->y < rc->draw_end)
     {
-        data->texY = (int)fmod(data->texPos, (data->tex_h - 1));
+        // data->texY = (int)fmod(data->texPos, (data->tex_h - 1));
+        data->texY = (int)data->texPos & (data->tex_h - 1);
         data->texPos += data->step;
-        data->color = *(int *)(data->img_color + (data->texY * data->tex_size_line + data->texX * (data->tex_bbp / 8)));
-        // if (rc->side == 1)
-        //     data->color = (data->color >> 1) & 0x7F7F7F;
+        data->color = *(int *)(data->img_color + (data->texY * data->tex_w + data->texX));
+        if (rc->side == 1)
+            data->color = (data->color >> 1) & 0x7F7F7F;
         img_pixel_put(data, x, data->y, data->color);
         data->y++;
     }
